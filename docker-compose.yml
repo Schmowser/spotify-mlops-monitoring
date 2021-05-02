@@ -70,13 +70,16 @@ services:
       - elasticsearch
 
   filebeat:
-    image: docker.elastic.co/beats/filebeat:$ELK_VERSION
+    build:
+      context: filebeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
     # Need to override user so we can access the log files, and docker.sock
     user: root
     networks:
       - elk
     volumes:
-      - /home/schmowser/PycharmProjects/spotify-mlops/monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
     environment:
