@@ -69,9 +69,31 @@ services:
     depends_on:
       - elasticsearch
 
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:$ELK_VERSION
+    # Need to override user so we can access the log files, and docker.sock
+    user: root
+    networks:
+      - elk
+    volumes:
+      - /home/schmowser/PycharmProjects/spotify-mlops/monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - KIBANA_HOST=kibana
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME:-elastic}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD:-changeme}
+    # Disable strict permission checks
+    command: [ "--strict.perms=false" ]
+    depends_on:
+      - elasticsearch
+      - kibana
+
 networks:
   elk:
     driver: bridge
 
 volumes:
   elasticsearch:
+  filebeat:
