@@ -2,6 +2,9 @@ filebeat.inputs:
 - type: container
   paths:
     - '/var/lib/docker/containers/*/*.log'
+  json.message_key: message
+  json.keys_under_root: true
+  json.add_error_key: true
 
 output.elasticsearch:
   hosts: 'elasticsearch:9200'
