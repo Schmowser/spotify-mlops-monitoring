@@ -11,3 +11,7 @@ monitoring.ui.container.elasticsearch.enabled: true
 #
 elasticsearch.username: elastic
 elasticsearch.password: changeme
+
+## Security necessary for Alerts
+xpack.security.encryptionKey: "something_at_least_32_characters" # TODO: Replace by encrypted key
+xpack.encryptedSavedObjects.encryptionKey: "something_at_least_32_characters" # TODO: Replace by encrypted key
